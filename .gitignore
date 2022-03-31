@@ -3,3 +3,10 @@
 ################################################################################
 
 /.vs/MyPinPad.DeveloperTest/v17/TestStore/0
+/MyPinPad.Hashing.Api/bin/Debug/net6.0
+/MyPinPad.Hashing.Api/obj
+/MyPinPad.Sandwiches.Api/bin/Debug/net6.0
+/MyPinPad.Sandwiches.Api/obj/Debug/net6.0
+/MyPinPad.Sandwiches.UnitTests/bin
+/MyPinPad.Sandwiches.UnitTests/obj/Debug/net6.0
+/MyPinPad.Sandwiches.UnitTests/obj
