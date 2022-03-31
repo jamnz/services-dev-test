@@ -13,37 +13,34 @@ namespace MyPinPad.Sandwiches.Api.Services
         private readonly IRecipeRepository _recipeRepository;
         private readonly IHashApi _hashApi;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        private readonly IMemoryCache _cache;
-
-        public RecipeService(IRecipeRepository productRepository, IHashApi categoryRepository,  IMemoryCache cache, IMapper mapper)
+        public RecipeService(IRecipeRepository productRepository, IHashApi categoryRepository, IConfiguration configuration, IMapper mapper)
         {
             _recipeRepository = productRepository;
-            _hashApi = categoryRepository;         
-            _cache = cache;
+            _hashApi = categoryRepository;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
-
         async Task<RecipeHashed> IRecipeService.SaveAsync(Recipe recipe)
         {
-       
-            var hash = await _hashApi.GetHash(recipe);
-
-         
             var hashedRecipe = _mapper.Map<Recipe, RecipeHashed>(recipe);
-            hashedRecipe.Hash = hash;
+
+            var useRecipeHash = _configuration.GetValue<bool>("HashAlgorithm");
+            if (useRecipeHash)
+            {
+                var hash = await _hashApi.GetHash(recipe);
+                hashedRecipe.Hash = hash;
+            }
 
             await _recipeRepository.AddAsync(hashedRecipe);
             return hashedRecipe;
-
         }
 
         async Task<RecipeHashed> IRecipeService.GetByName(string name)
         {
             return await _recipeRepository.FindByNameAsync(name);
-        }
-
-       
+        }       
     }
 }

@@ -36,10 +36,7 @@ namespace MyPinPad.Sandwiches.Api.Services
             });
 
             return ingredients;
-        }
-
-      
-
+        }   
     }
 }
 

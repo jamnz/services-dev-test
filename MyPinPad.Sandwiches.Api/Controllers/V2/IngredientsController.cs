@@ -5,13 +5,10 @@ using MyPinPad.Sandwiches.Api.Domain.Services;
 using MyPinPad.Sandwiches.Api.Models;
 using MyPinPad.Sandwiches.Api.Resources;
 
-namespace MyPinPad.Sandwiches.Api.Controllers;
+namespace MyPinPad.Sandwiches.Api.Controllers.V2;
 
 [ApiController]
 [Route("[controller]")]
-[ApiVersion("1.0")]
-[ApiVersion("1.1")]
-
 public class IngredientsController : ControllerBase
 {
     private readonly IIngredientService _ingredientsService;
@@ -24,16 +21,15 @@ public class IngredientsController : ControllerBase
     }
 
     [HttpGet]
-
+    [MapToApiVersion("2.0")]
     [ProducesResponseType(typeof(IEnumerable<IngredientResource>), 200)]
     public async Task<IActionResult> Get()
     {
+        //note for vesioning the new version would call new Services or operations
         var ingredients = _ingredientsService.List();
         var resources = _mapper.Map<IEnumerable<Ingredient>, IEnumerable<IngredientResource>>(ingredients);
 
-
         var result = Ok(resources) as IActionResult;
-        //  var result = Ok(new GetIngredientsResponse()) as IActionResult;
         return result;
     }
 }
