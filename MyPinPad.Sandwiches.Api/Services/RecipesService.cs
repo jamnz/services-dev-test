@@ -24,21 +24,8 @@ namespace MyPinPad.Sandwiches.Api.Services
             _mapper = mapper;
         }
 
-        //public async Task<QueryResult<Recipe>> ListAsync(string name)
-        //{
-        //    // Here I list the query result from cache if they exist, but now the data can vary according to the category ID, page and amount of
-        //    // items per page. I have to compose a cache to avoid returning wrong data.
-        //    string cacheKey = GetCacheKeyForProductsQuery(query);
 
-        //    var products = await _cache.GetOrCreateAsync(cacheKey, (entry) =>
-        //    {
-        //        entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-        //        return _productRepository.ListAsync(query);
-        //    });
-
-        //    return products;
-        //}
-        public async Task<RecipeHashed> SaveAsync(Recipe recipe) 
+        async Task<RecipeHashed> IRecipeService.SaveAsync(Recipe recipe)
         {
        
             var hash = await _hashApi.GetHash(recipe);
@@ -51,5 +38,12 @@ namespace MyPinPad.Sandwiches.Api.Services
             return hashedRecipe;
 
         }
+
+        async Task<RecipeHashed> IRecipeService.GetByName(string name)
+        {
+            return await _recipeRepository.FindByNameAsync(name);
+        }
+
+       
     }
 }

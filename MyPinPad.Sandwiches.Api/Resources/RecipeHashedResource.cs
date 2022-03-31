@@ -10,6 +10,5 @@
         public IList<IngredientResource> Ingredients { get; set; }
         public string Hash { get; set; }
 
-
     }
 }

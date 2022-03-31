@@ -3,13 +3,6 @@ using MyPinPad.Sandwiches.Api.Domain.Repositories;
 
 namespace MyPinPad.Sandwiches.Api.Repositories
 {
-    public class RecipeRepository : IRecipeRepository
-    {
-        Task IRecipeRepository.AddAsync(RecipeHashed hashedRecipe)
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class IngredientRepository : IIngredientRepository
     {
         Task IIngredientRepository.AddAsync(Ingredient category)

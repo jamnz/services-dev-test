@@ -1,33 +1,33 @@
 ﻿using MyPinPad.Sandwiches.Api.Domain.Models;
 using MyPinPad.Sandwiches.Api.Domain.Repositories;
+using MyPinPad.Sandwiches.Api.Repositories.Models;
 using Newtonsoft.Json;
 
 namespace MyPinPad.Sandwiches.Api.Repositories
 {
-   public class HashApi : IHashApi
-   {
-        async Task<string> IHashApi.GetHash(Recipe recipe) {
+    public class HashApi : IHashApi
+    {
+        private readonly IConfiguration _configuration;
+        public HashApi(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        async Task<string> IHashApi.GetHash(Recipe recipe)
+        {
+            var hashAlgorithm = _configuration["HashAlgorithm"];
+            var hashSalt = _configuration["HashSalt"];
             var json = JsonConvert.SerializeObject(recipe);
-            var createHashRequest  = new CreateHashRequest() { Message = json, Algorithm = "SHA1", Salt = "salty"};
+            var createHashRequest = new CreateHashRequest() { Message = json, Algorithm = hashAlgorithm, Salt = hashSalt };
             using (var httpClient = new HttpClient())
             {
                 JsonContent content = JsonContent.Create(createHashRequest);
-                var response = await httpClient.PostAsync("https://localhost:7214/CreateHash", content);
+                var hashApiUrl = _configuration["HashApiUrl"];
+                var response = await httpClient.PostAsync(hashApiUrl, content);
                 var responseObject = JsonConvert.DeserializeObject<CreateHashResponse>(await response.Content.ReadAsStringAsync());
                 return responseObject.Hash;
-                
+
             }
-        }     
+        }
     }
-}
-public class CreateHashRequest
-{    
-    public string Message { get; set; }
-    public string Salt { get; set; } 
-    public string Algorithm { get; set; }
-}
-public class CreateHashResponse
-{
-    public string Hash { get; set; }
-   
 }

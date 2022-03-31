@@ -9,6 +9,7 @@ namespace MyPinPad.Hashing.Api.Controllers
     [Route("[controller]")]
     public class CreateHashController : ControllerBase
     {
+       
         [HttpPost]
         [ProducesResponseType(typeof(CreateHashResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

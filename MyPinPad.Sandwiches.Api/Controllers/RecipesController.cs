@@ -22,10 +22,12 @@ public class RecipesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string name)
     {
-        var result = Ok(new GetRecipeResponse()) as IActionResult;
-        return Ok(result);
+        var result = await _recipeService.GetByName(name);
+        var recipeHashedResource = _mapper.Map<RecipeHashed, RecipeHashedResource>(result);
+
+        return Ok(recipeHashedResource);
     }
 
     //[HttpGet]
@@ -61,8 +63,8 @@ public class RecipesController : ControllerBase
             //    return BadRequest(new ErrorResource(result.Message));
             //}
 
-            var categoryResource = _mapper.Map<RecipeHashed, RecipeHashedResource>(result);
-            return Ok(categoryResource);
+            var recipeHashedResource = _mapper.Map<RecipeHashed, RecipeHashedResource>(result);
+            return Ok(recipeHashedResource);
 
             return CreatedAtRoute("GetByName", new { name = request.Name });
         }
