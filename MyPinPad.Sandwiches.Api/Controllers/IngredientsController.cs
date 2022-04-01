@@ -29,11 +29,16 @@ public class IngredientsController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var ingredients = _ingredientsService.List();
-        var resources = _mapper.Map<IEnumerable<Ingredient>, IEnumerable<IngredientResource>>(ingredients);
-
-
-        var result = Ok(resources) as IActionResult;
-        //  var result = Ok(new GetIngredientsResponse()) as IActionResult;
-        return result;
+        IActionResult response;
+        try
+        {
+            var resources = _mapper.Map<IEnumerable<Ingredient>, IEnumerable<IngredientResource>>(ingredients);
+            response = Ok(resources) as IActionResult;
+        }
+        catch (KeyNotFoundException ex)
+        {
+            response = BadRequest();
+        }
+        return response;
     }
 }

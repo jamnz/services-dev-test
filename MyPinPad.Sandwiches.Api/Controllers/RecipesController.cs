@@ -23,11 +23,21 @@ public class RecipesController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Get(string name)
-    {
-        var result = await _recipeService.GetByName(name);
-        var recipeHashedResource = _mapper.Map<RecipeHashed, RecipeHashedResource>(result);
+    {               
+        IActionResult response;
 
-        return Ok(recipeHashedResource);
+        try
+        {
+            var result = await _recipeService.GetByName(name);
+            var recipeHashedResource = _mapper.Map<RecipeHashed, RecipeHashedResource>(result);
+            response = Ok(recipeHashedResource) as IActionResult;
+        }
+        catch (KeyNotFoundException ex)
+        {
+            response = BadRequest(ex.Message);
+        }
+
+        return response;
     }
 
     //[HttpGet]
